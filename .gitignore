@@ -1,0 +1,5 @@
+node_modules
+cypress/videos
+cypress/screenshots
+session_cookie.json
+.env
