@@ -13,9 +13,11 @@ const formatCaseId = caseId =>
     .split("")
     .reduce(reducer, "");
 
+const timeout = 60000; // 1 min
+
 describe("Authentication", async function() {
   it("Visits the ccd app and logs in", function() {
-    cy.visit("https://www-ccd.aat.platform.hmcts.net/", { timeout: 30000 });
+    cy.visit("https://www-ccd.aat.platform.hmcts.net/", { timeout });
     cy.wait(100);
     cy.get("#username").type(USERNAME);
     cy.get("#password").type(PASSWORD);
@@ -25,7 +27,7 @@ describe("Authentication", async function() {
 
     cy.get(
       `[aria-label='go to case with Case reference:${formatCaseId(CASE_ID)}']`,
-      { timeout: 30000 }
+      { timeout }
     ).click();
 
     cy.request(
