@@ -18,7 +18,13 @@ node_modules/:
 
 
 $(.SESSION_COOKIE_SPEC_FILE): node_modules/
+	@echo 🌀 Creating a new sidam session
 	@. .env; cypress run
+
+.PHONY: session ## Creates a new sidam session
+session:
+	@rm -f $(.SESSION_COOKIE_SPEC_FILE)
+	@$(MAKE) $(.SESSION_COOKIE_SPEC_FILE)
 
 .PHONY: test ## Tests the api gateway
 test: $(.SESSION_COOKIE_SPEC_FILE)
