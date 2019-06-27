@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+const data = require("../session_cookie");
+console.log(data.value);

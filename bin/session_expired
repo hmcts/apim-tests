@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const data = require("../session_cookie");
+
+const has_expired =
+  data.expiry * 1000 <
+  (d => d.getTime() - d.getTimezoneOffset() * 6e4)(new Date());
+
+console.log(has_expired);

@@ -16,7 +16,6 @@ node_modules/:
 	@echo ""; echo 🌀 Install npm dependencies
 	@cd $(@D); npm i
 
-
 $(.SESSION_COOKIE_SPEC_FILE): node_modules/
 	@echo 🌀 Creating a new sidam session
 	@. .env; cypress run
@@ -28,19 +27,16 @@ session:
 
 .PHONY: test ## Tests the api gateway
 test: $(.SESSION_COOKIE_SPEC_FILE)
-	$(eval is_session_expired = $(shell node -e "const data = require('./session_cookie'); console.log(data.expiry * 1000 < ( d => d.getTime() - (d.getTimezoneOffset()*6e4) )( new Date() ))"))
-	@if [ $(is_session_expired) = "true" ]; then\
-        echo "Trigger session generation";\
+	@if [ $(shell ./bin/session_expired) = true ]; then \
+		$(MAKE) session; \
     fi
-	@echo 🌀 Current token is valid
-	$(eval session_token = $(shell node -e "const data = require('./session_cookie'); console.log(data.value)"))
-	curl \
+	@. .env; curl \
 		-v \
 		-k \
 		-x proxyout.reform.hmcts.net:8080 \
 		-H "User-Agent:" \
-		-H "Authorization: Bearer $(session_token)" \
+		-H "Authorization: Bearer $(shell ./bin/session_token)" \
 		-H "ServiceAuthorization: ccd_gw" \
 		-H "experimental: false" \
 		-H "Ocp-Apim-Subscription-Key: $(shell . .env; echo $${SUBSCRIPTION_KEY})" \
-		https://apim-preview.service.core-compute-preview.internal/ccd-data-store-api/cases/1544633061047766
+		https://apim-preview.service.core-compute-preview.internal/ccd-data-store-api/cases/$$CYPRESS_CASE_ID
