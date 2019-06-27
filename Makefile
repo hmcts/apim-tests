@@ -22,7 +22,7 @@ $(.SESSION_COOKIE_SPEC_FILE): node_modules/
 
 .PHONY: test ## Tests the api gateway
 test: $(.SESSION_COOKIE_SPEC_FILE)
-	$(eval is_session_expired = $(shell node -e "const data = require('./session_cookie'); console.log(data.expiry * 1000 < Date.now())"))
+	$(eval is_session_expired = $(shell node -e "const data = require('./session_cookie'); console.log(data.expiry * 1000 < ( d => d.getTime() - (d.getTimezoneOffset()*6e4) )( new Date() ))"))
 	@if [ $(is_session_expired) = "true" ]; then\
         echo "Trigger session generation";\
     fi
