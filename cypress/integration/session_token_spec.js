@@ -2,7 +2,7 @@ const CASE_ID = Cypress.env("CASE_ID");
 const USERNAME = Cypress.env("USERNAME");
 const PASSWORD = Cypress.env("PASSWORD");
 
-const reducer = (acc, d, i) => {
+const withCaseIdFormat = (acc, d, i) => {
   const sep = i % 4 === 0 && i !== 0 ? "-" : "";
   acc += sep + d;
   return acc;
@@ -11,7 +11,7 @@ const reducer = (acc, d, i) => {
 const formatCaseId = caseId =>
   String(caseId)
     .split("")
-    .reduce(reducer, "");
+    .reduce(withCaseIdFormat, "");
 
 const timeout = 60000; // 1 min
 
@@ -25,10 +25,9 @@ describe("Authentication", async function() {
 
     cy.wait(2000);
 
-    cy.get(
-      `[aria-label='go to case with Case reference:${formatCaseId(CASE_ID)}']`,
-      { timeout }
-    ).click();
+    cy.get(`[href='/case/SSCS/Benefit/${CASE_ID}']`, {
+      timeout
+    }).click();
 
     cy.request(
       `https://gateway-ccd.aat.platform.hmcts.net/activity/cases/${CASE_ID}/activity`
