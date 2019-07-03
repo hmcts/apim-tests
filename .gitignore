@@ -3,3 +3,5 @@ cypress/videos
 cypress/screenshots
 session_cookie.json
 .env
+.archives
+.certificate

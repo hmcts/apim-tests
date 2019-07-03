@@ -18,7 +18,7 @@ node_modules/:
 
 $(.SESSION_COOKIE_SPEC_FILE): node_modules/
 	@echo 🌀 Creating a new sidam session
-	@. .env; cypress run
+	@. .env; cypress run --spec cypress/integration/session_token_spec.js
 
 .PHONY: session ## Creates a new sidam session
 session:
@@ -40,3 +40,25 @@ test: $(.SESSION_COOKIE_SPEC_FILE)
 		-H "experimental: false" \
 		-H "Ocp-Apim-Subscription-Key: $(shell . .env; echo $${SUBSCRIPTION_KEY})" \
 		https://apim-preview.service.core-compute-preview.internal/ccd-data-store-api/cases/$$CYPRESS_CASE_ID
+
+.PHONY: cypress
+cypress:
+	@. .env; export HTTP_PROXY="proxyout.reform.hmcts.net:8080"; cypress open
+
+.certificate/:
+	mkdir -p $@ && openssl req \
+		-newkey rsa:2048 \
+		-new \
+		-nodes \
+		-x509 \
+		-days 3650 \
+		-keyout $@/key.pem \
+		-out $@/cert.pem \
+		-subj "/C=UK/ST=Denial/L=London/O=Dis/CN=www.example.com"
+
+.PHONY: certificate  ## Creates a new self-signed certificate
+certificate: .certificate/
+
+.PHONY: portal-session  ## Creates a new portal session token
+portal-session:
+	@. .env; node src/portal_session.js
