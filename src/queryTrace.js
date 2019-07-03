@@ -1,8 +1,9 @@
-const superagent = require("superagent");
-const httpsAgent = require("./lib/httpsAgent");
-const getCookieValueOf = require("./lib/getCookieValueOf");
-const curlCmd = require("./lib/curlCmd");
-const { exec } = require("child_process");
+const fs = require("fs");
+const createHttpsAgent = require("./lib/createHttpsAgent");
+const getSessionToken = require("./lib/getSessionToken");
+const getVerificationToken = require("./lib/getVerificationToken");
+const getTraceFor = require("./lib/getTraceFor");
+
 const { inspect } = require("util");
 const bearer = require("../session_cookie").value;
 
@@ -12,74 +13,39 @@ const {
   PORTAL_BASE_URL,
   SUBSCRIPTION_KEY,
   PORTAL_PREVIEW_HOST,
-  CYPRESS_CASE_ID
+  CYPRESS_CASE_ID,
+  PROXY_HOST,
+  PROXY_PORT
 } = process.env;
 
-const getSession = async () => {
-  const acceptRedirects = res => res.status < 400;
-  const sessionCookieKey = ".AspNet.ApplicationCookie";
-  const sessionReq = await superagent
-    .post(PORTAL_BASE_URL + "/signin")
-    .agent(httpsAgent)
-    .redirects(0)
-    .ok(acceptRedirects)
-    .send({
-      ReturnUrl: "/",
-      Email: PORTAL_EMAIL,
-      Password: PORTAL_PASSWORD
-    });
-  const sessionToken = getCookieValueOf(sessionCookieKey)(sessionReq.header);
-  return sessionToken;
-};
-
-const getVerificationToken = async () => {
-  const verificationCookieKey = "__RequestVerificationToken";
-  const sessionReq = await superagent.get(PORTAL_BASE_URL).agent(httpsAgent);
-  const verificationToken = getCookieValueOf(verificationCookieKey)(
-    sessionReq.header
-  );
-  return verificationToken;
-};
-
-const getTraceFor = async (formData, sessionToken, verificationToken) => {
-  const queryUrl = PORTAL_BASE_URL + "/console/query";
-  const cmd = curlCmd({
-    queryUrl,
-    sessionToken,
-    verificationToken,
-    formData
-  });
-
-  const queryResult = new Promise((resolve, reject) => {
-    exec(cmd, (error, stdout) => {
-      if (error) {
-        return reject(error);
-      }
-      return resolve(stdout.toString());
-    });
-  });
-
-  const data = JSON.parse(await queryResult);
-
-  const traceUrl = data.headers.find(
-    ({ name }) => name === "Ocp-Apim-Trace-Location"
-  ).value;
-
-  const traceResponse = await superagent.get(traceUrl);
-
-  const trace = traceResponse.body;
-
-  return trace;
-};
+const httpsAgent = createHttpsAgent({
+  host: PROXY_HOST,
+  port: PROXY_PORT,
+  key: fs.readFileSync("./.certificate/key.pem"),
+  cert: fs.readFileSync("./.certificate/cert.pem")
+});
 
 async function main() {
   try {
-    const [sessionToken, verificationToken] = await Promise.all([
-      getSession(),
-      getVerificationToken()
-    ]);
+    const baseUrl = PORTAL_BASE_URL;
+
+    const sessionToken = await getSessionToken({
+      baseUrl,
+      email: PORTAL_EMAIL,
+      password: PORTAL_PASSWORD,
+      httpsAgent
+    });
+
+    const verificationToken = await getVerificationToken({
+      baseUrl,
+      httpsAgent
+    });
 
     const formData = {
+      httpMethod: "GET",
+      scheme: "https",
+      host: PORTAL_PREVIEW_HOST,
+      path: `ccd-data-store-api/cases/${CYPRESS_CASE_ID}`,
       headers: [
         {
           name: "Host",
@@ -106,14 +72,17 @@ async function main() {
           name: "Ocp-Apim-Trace",
           value: "true"
         }
-      ],
-      httpMethod: "GET",
-      host: PORTAL_PREVIEW_HOST,
-      path: `ccd-data-store-api/cases/${CYPRESS_CASE_ID}`,
-      scheme: "https"
+      ]
     };
 
-    const trace = await getTraceFor(formData, sessionToken, verificationToken);
+    const trace = await getTraceFor({
+      baseUrl,
+      formData,
+      sessionToken,
+      verificationToken,
+      proxyHost: PROXY_HOST,
+      proxyPort: PROXY_PORT
+    });
 
     console.log(inspect(trace, { compact: false, depth: 10, breakLength: 80 }));
   } catch (e) {
