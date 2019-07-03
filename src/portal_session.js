@@ -1,6 +1,8 @@
 const superagent = require("superagent");
 const httpsAgent = require("./lib/httpsAgent");
 
+const { PORTAL_EMAIL, PORTAL_PASSWORD, PORTAL_BASE_URL } = process.env;
+
 const getCookieValueOf = cookieKey => headers => {
   const str = headers["set-cookie"][0];
   const matcher = new RegExp(`(?<=${cookieKey}=).*?(?=;)`, "gi");
@@ -12,19 +14,18 @@ const getCookieValueOf = cookieKey => headers => {
 };
 
 async function main() {
-  const baseUrl = "https://apim-portal.service.core-compute-preview.internal";
   const sessionCookieKey = ".AspNet.ApplicationCookie";
 
   try {
     const sessionReq = await superagent
-      .post(baseUrl + "/signin")
+      .post(PORTAL_BASE_URL + "/signin")
       .agent(httpsAgent)
       .redirects(0)
       .ok(res => res.status < 400)
       .send({
         ReturnUrl: "/",
-        Email: process.env.PORTAL_EMAIL,
-        Password: process.env.PORTAL_PASSWORD
+        Email: PORTAL_EMAIL,
+        Password: PORTAL_PASSWORD
       });
 
     const sessionToken = getCookieValueOf(sessionCookieKey)(sessionReq.header);
