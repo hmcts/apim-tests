@@ -59,6 +59,6 @@ cypress:
 .PHONY: certificate  ## Creates a new self-signed certificate
 certificate: .certificate/
 
-.PHONY: portal-session  ## Creates a new portal session token
-portal-session:
-	@. .env; node src/portal_session.js
+.PHONY: query-trace  ## Creates a new portal session token
+query-trace:
+	@. .env; node src/queryTrace.js

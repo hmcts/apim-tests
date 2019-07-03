@@ -4,10 +4,12 @@ const fs = require("fs");
 const key = fs.readFileSync("./.certificate/key.pem");
 const cert = fs.readFileSync("./.certificate/cert.pem");
 
+const { PROXY_HOST, PROXY_PORT } = process.env;
+
 const httpsAgent = tunnel.httpsOverHttp({
   proxy: {
-    host: "proxyout.reform.hmcts.net",
-    port: 8080
+    host: PROXY_HOST,
+    port: PROXY_PORT
   },
   cert,
   key,
