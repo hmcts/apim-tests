@@ -1,29 +1,19 @@
-const fs = require("fs");
 const superagent = require("superagent");
-const tunnel = require("tunnel");
+const httpsAgent = require("./lib/httpsAgent");
 
-const key = fs.readFileSync("./.certificate/key.pem");
-const cert = fs.readFileSync("./.certificate/cert.pem");
-
-const httpsAgent = tunnel.httpsOverHttp({
-  proxy: {
-    host: "proxyout.reform.hmcts.net",
-    port: 8080
-  },
-  cert,
-  key,
-  passphrase: "YYY",
-  rejectUnauthorized: false
-});
-
-const getSessionToken = headers => {
+const getCookieValueOf = cookieKey => headers => {
   const str = headers["set-cookie"][0];
-  const token = str.match(/(?<=.AspNet.ApplicationCookie=).*?(?=;)/g)[0];
-  return token;
+  const matcher = new RegExp(`(?<=${cookieKey}=).*?(?=;)`, "gi");
+  const matches = str.match(matcher);
+  if (matches && matches.length > 0) {
+    return str.match(matcher)[0];
+  }
+  return undefined;
 };
 
 async function main() {
   const baseUrl = "https://apim-portal.service.core-compute-preview.internal";
+  const sessionCookieKey = ".AspNet.ApplicationCookie";
 
   try {
     const sessionReq = await superagent
@@ -37,7 +27,7 @@ async function main() {
         Password: process.env.PORTAL_PASSWORD
       });
 
-    const sessionToken = getSessionToken(sessionReq.header);
+    const sessionToken = getCookieValueOf(sessionCookieKey)(sessionReq.header);
     console.log(`Using sessionToken token ${sessionToken}`);
   } catch (e) {
     console.log(e);
