@@ -59,6 +59,9 @@ cypress:
 .PHONY: certificate  ## Creates a new self-signed certificate
 certificate: .certificate/
 
-.PHONY: query-trace  ## Creates a new portal session token
-query-trace:
+.PHONY: query-trace  ## Displays a policies trace of a test request
+query-trace: $(.SESSION_COOKIE_SPEC_FILE)
+	@if [ $(shell ./bin/session_expired) = true ]; then \
+		$(MAKE) session; \
+    fi
 	@. .env; node src/queryTrace.js
