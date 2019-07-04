@@ -25,8 +25,8 @@ session:
 	@rm -f $(.SESSION_COOKIE_SPEC_FILE)
 	@$(MAKE) $(.SESSION_COOKIE_SPEC_FILE)
 
-.PHONY: test ## Tests the api gateway
-test: $(.SESSION_COOKIE_SPEC_FILE)
+.PHONY: api-call ## Performs an api call and displays the returned payload
+api-call: $(.SESSION_COOKIE_SPEC_FILE)
 	@if [ $(shell ./bin/session_expired) = true ]; then \
 		$(MAKE) session; \
     fi
@@ -59,9 +59,10 @@ cypress:
 .PHONY: certificate  ## Creates a new self-signed certificate
 certificate: .certificate/
 
-.PHONY: query-trace  ## Displays a policies trace of a test request
-query-trace: $(.SESSION_COOKIE_SPEC_FILE)
+.PHONY: test-policy ## Runs tests against APIM s2s policy
+test-policy: $(.SESSION_COOKIE_SPEC_FILE)
 	@if [ $(shell ./bin/session_expired) = true ]; then \
 		$(MAKE) session; \
     fi
-	@. .env; node src/queryTrace.js
+	@echo ""; echo 🌀 Run policy tests
+	@npm test

@@ -25,8 +25,14 @@ These scripts allow to quickly test that the previwe apim works as expected. As 
 
 ## Commands
 
-`make test`
+Type `make help` to list the available commands
 
-Will take care of installing dependencies and curl against one of the apim endpoints.
+```
+Available commands:
 
-You should expect a JSON response corresponding to the case ID data
+	api-call                          Performs an api call and displays the returned payload
+	certificate                       Creates a new self-signed certificate
+	help                              Display help section
+	session                           Creates a new sidam session
+	test-policy                       Runs tests against APIM s2s policy
+```
