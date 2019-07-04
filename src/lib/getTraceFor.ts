@@ -1,6 +1,16 @@
-const superagent = require("superagent");
-const curlCmd = require("./curlCmd");
-const { exec } = require("child_process");
+import * as superagent from "superagent";
+import curlCmd from "./curlCmd";
+import { exec } from "child_process";
+import { Apim } from "../lib";
+
+interface getTraceParams {
+  baseUrl: string;
+  formData: any;
+  sessionToken: Apim.Token;
+  verificationToken: Apim.Token;
+  proxyHost: Apim.Hostname;
+  proxyPort: Apim.Port;
+}
 
 const getTraceFor = async ({
   baseUrl,
@@ -9,7 +19,7 @@ const getTraceFor = async ({
   verificationToken,
   proxyHost,
   proxyPort
-}) => {
+}: getTraceParams) => {
   const queryUrl = baseUrl + "/console/query";
   const cmd = curlCmd({
     queryUrl,
@@ -27,7 +37,7 @@ const getTraceFor = async ({
       }
       return resolve(stdout.toString());
     });
-  });
+  }) as Promise<string>;
 
   const data = JSON.parse(await queryResult);
 
@@ -42,4 +52,4 @@ const getTraceFor = async ({
   return trace;
 };
 
-module.exports = getTraceFor;
+export default getTraceFor;

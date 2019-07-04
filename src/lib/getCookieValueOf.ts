@@ -1,4 +1,6 @@
-const getCookieValueOf = cookieKey => headers => {
+const getCookieValueOf = (cookieKey: string) => (
+  headers: Headers
+): string | undefined => {
   const str = headers["set-cookie"][0];
   const matcher = new RegExp(`(?<=${cookieKey}=).*?(?=;)`, "gi");
   const matches = str.match(matcher);
@@ -8,4 +10,4 @@ const getCookieValueOf = cookieKey => headers => {
   return undefined;
 };
 
-module.exports = getCookieValueOf;
+export default getCookieValueOf;

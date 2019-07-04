@@ -1,4 +1,14 @@
-const querystring = require("querystring");
+import * as querystring from "querystring";
+import { Apim } from "../lib";
+
+interface curlCmdParams {
+  queryUrl: string;
+  sessionToken: Apim.Token;
+  verificationToken: Apim.Token;
+  formData: Apim.FormData;
+  proxyHost: Apim.Hostname;
+  proxyPort: Apim.Port;
+}
 
 const curlCmd = ({
   queryUrl,
@@ -7,14 +17,14 @@ const curlCmd = ({
   formData,
   proxyHost,
   proxyPort
-}) => {
+}: curlCmdParams) => {
   const now = Date.now();
   return `
     curl '${queryUrl}' \
       -x ${proxyHost}:${proxyPort} \
       -H 'Content-Type: multipart/form-data; boundary=----${now}' \
       -H 'Accept: application/json' \
-      -H 'Cookie: ${sessionToken.name}=${querystring.stringify(
+      -H 'Cookie: ${sessionToken.name}=${querystring.escape(
     sessionToken.value
   )};' \
       -H 'Connection: keep-alive' \
@@ -27,4 +37,4 @@ const curlCmd = ({
   `;
 };
 
-module.exports = curlCmd;
+export default curlCmd;

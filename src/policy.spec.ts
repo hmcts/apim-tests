@@ -1,9 +1,10 @@
-const fs = require("fs");
-const jwt = require("jsonwebtoken");
-const createHttpsAgent = require("./lib/createHttpsAgent");
-const getSessionToken = require("./lib/getSessionToken");
-const getVerificationToken = require("./lib/getVerificationToken");
-const getTraceFor = require("./lib/getTraceFor");
+import { readFileSync } from "fs";
+import * as jwt from "jsonwebtoken";
+import createHttpsAgent from "./lib/createHttpsAgent";
+import getSessionToken from "./lib/getSessionToken";
+import getVerificationToken from "./lib/getVerificationToken";
+import getTraceFor from "./lib/getTraceFor";
+import { Apim } from "./lib";
 const bearer = require("../session_cookie").value;
 
 const {
@@ -22,8 +23,8 @@ const SERVICE_SUBSCRIPTION = "ccd_gw";
 const httpsAgent = createHttpsAgent({
   host: PROXY_HOST,
   port: PROXY_PORT,
-  key: fs.readFileSync("./.certificate/key.pem"),
-  cert: fs.readFileSync("./.certificate/cert.pem")
+  key: readFileSync("./.certificate/key.pem"),
+  cert: readFileSync("./.certificate/cert.pem")
 });
 
 const getTrace = async formData => {
@@ -106,12 +107,13 @@ describe("The api gateway", () => {
     ).value;
     expect(typeof s2sToken === "string").toBeTruthy();
 
-    const decoded = jwt.decode(s2sToken);
+    const decoded = jwt.decode(s2sToken) as Apim.Decoded;
 
     const serviceSubscription = decoded.sub;
     expect(serviceSubscription).toEqual(SERVICE_SUBSCRIPTION);
 
-    const secondsTillExpiration = decoded.exp - Math.round(Date.now() / 1000);
+    const secondsTillExpiration =
+      parseInt(decoded.exp, 10) - Math.round(Date.now() / 1000);
     expect(secondsTillExpiration > 0).toBeTruthy();
   });
 });

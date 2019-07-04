@@ -1,8 +1,14 @@
-const superagent = require("superagent");
-const getCookieValueOf = require("./getCookieValueOf");
+import * as superagent from "superagent";
+import getCookieValueOf from "./getCookieValueOf";
+import { Apim } from "../lib";
 
-const getSessionToken = async ({ baseUrl, email, password, httpsAgent }) => {
-  const acceptRedirects = res => res.status < 400;
+const getSessionToken = async ({
+  baseUrl,
+  email,
+  password,
+  httpsAgent
+}): Promise<Apim.Token> => {
+  const acceptRedirects = (res: superagent.Response) => res.status < 400;
   const name = ".AspNet.ApplicationCookie";
   const sessionReq = await superagent
     .post(baseUrl + "/signin")
@@ -21,4 +27,4 @@ const getSessionToken = async ({ baseUrl, email, password, httpsAgent }) => {
   };
 };
 
-module.exports = getSessionToken;
+export default getSessionToken;
