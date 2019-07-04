@@ -1,6 +1,8 @@
 # APIM tests
 
-These scripts allow to quickly test that the previwe apim works as expected. As the setup can be quite tedious, these scripts make it quicker.
+This project is aimed at performing tests on an Azure API gateway, especially on its policies as some can involve programatic computation (via Azure Function apps for example).
+
+As the manual setup can be quite tedious, these scripts will ease the checks.
 
 ## Prerequisites
 
