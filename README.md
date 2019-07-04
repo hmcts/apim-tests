@@ -7,12 +7,21 @@ These scripts allow to quickly test that the previwe apim works as expected. As 
 - GNUmake
 - nodejs
 - curl
-- 2 env variables as specified in the `.env.sample` file to place in a `.env` file:
-  - `SUBSCRIPTION_KEY` corresponds to the `Ocp-Apim-Subscription-Key` you can find in the apim GUI console
-  - `CYPRESS_CASE_ID` corresponds to a valid case ID as we tests against CCD
-  - `CYPRESS_USERNAME` corresponds to a test account email
-  - `CYPRESS_PASSWORD` corresponds to a test account password
 - an **active** VPN connection
+- env variables as specified in the `.env.sample` file to place in a `.env` as specified above
+
+| Name                | Description                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| SUBSCRIPTION_KEY    | corresponds to the `Ocp-Apim-Subscription-Key` you can find in the apim GUI console |
+| CYPRESS_CASE_ID     | valid case ID as we tests against CCD                                               |
+| CYPRESS_USERNAME    | test account email                                                                  |
+| CYPRESS_PASSWORD    | test account password                                                               |
+| PORTAL_EMAIL        | portal account email                                                                |
+| PORTAL_PASSWORD     | portal account password                                                             |
+| PORTAL_BASE_URL     | portal base url                                                                     |
+| PORTAL_PREVIEW_HOST | portal base preview host name                                                       |
+| PROXY_HOST          | vpn proxy host name                                                                 |
+| PROXY_PORT          | vpn proxy port                                                                      |
 
 ## Commands
 
