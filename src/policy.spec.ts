@@ -12,13 +12,12 @@ const {
   PORTAL_PASSWORD,
   PORTAL_BASE_URL,
   SUBSCRIPTION_KEY,
+  SERVICE_SUBSCRIPTION,
   PORTAL_PREVIEW_HOST,
   CYPRESS_CASE_ID,
   PROXY_HOST,
   PROXY_PORT
 } = process.env;
-
-const SERVICE_SUBSCRIPTION = "ccd_gw";
 
 const httpsAgent = createHttpsAgent({
   host: PROXY_HOST,
