@@ -93,6 +93,8 @@ describe("The api gateway", () => {
   }, timeout);
 
   it("forwards the incoming request", () => {
+    expect(trace !== undefined).toBeTruthy();
+
     const forwarded = trace.traceEntries.backend[0];
     expect(forwarded.source).toEqual("forward-request");
     expect(forwarded.data.request.url).toContain(`cases/1111222233334444`);
