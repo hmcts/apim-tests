@@ -51,6 +51,8 @@ const getTrace = async (formData: Utils.FormData) => {
   return trace;
 };
 
+const timeout = 1000 * 30; // 30s
+
 describe("The api gateway", () => {
   let trace: Utils.Trace | undefined;
 
@@ -88,7 +90,7 @@ describe("The api gateway", () => {
         }
       ]
     });
-  });
+  }, timeout);
 
   it("forwards the incoming request", () => {
     const forwarded = trace.traceEntries.backend[0];

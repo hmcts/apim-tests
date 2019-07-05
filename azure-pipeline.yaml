@@ -17,13 +17,6 @@ jobs:
       vmImage: ubuntu-16.04
     steps:
       - task: Bash@3
-        displayName: Env display
-        inputs:
-          targetType: inline
-          script: echo $CYPRESS_CASE_ID
-        env:
-          CYPRESS_CASE_ID: $(CYPRESS_CASE_ID)
-      - task: Bash@3
         displayName: Policy tests
         inputs:
           targetType: inline
