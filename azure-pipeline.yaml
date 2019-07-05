@@ -21,3 +21,15 @@ jobs:
         inputs:
           targetType: inline
           script: make test-ci
+        env:
+          SUBSCRIPTION_KEY: $(SUBSCRIPTION_KEY)
+          SERVICE_SUBSCRIPTION: $(SERVICE_SUBSCRIPTION)
+          CYPRESS_CASE_ID: $(CYPRESS_CASE_ID)
+          CYPRESS_USERNAME: $(CYPRESS_USERNAME)
+          CYPRESS_PASSWORD: $(CYPRESS_PASSWORD)
+          PORTAL_EMAIL: $(PORTAL_EMAIL)
+          PORTAL_PASSWORD: $(PORTAL_PASSWORD)
+          PORTAL_BASE_URL: $(PORTAL_BASE_URL)
+          PORTAL_PREVIEW_HOST: $(PORTAL_PREVIEW_HOST)
+          PROXY_HOST: $(PROXY_HOST)
+          PROXY_PORT: $(PROXY_PORT)
