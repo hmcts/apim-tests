@@ -59,6 +59,7 @@ const getQueryTrace: Utils.getQueryTraceFn = async ({
     proxyHost,
     proxyPort
   });
+  console.log(curlCmd);
   const queryResult = JSON.parse(await runCmd(curlCmd));
   const matchTraceHeader = ({ name }) => name === "Ocp-Apim-Trace-Location";
   const traceUrl = queryResult.headers.find(matchTraceHeader).value;
