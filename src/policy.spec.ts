@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import createHttpsAgent from "./utils/createHttpsAgent";
 import getPortalSessionToken from "./utils/getPortalSessionToken";
 import getPortalVerificationToken from "./utils/getPortalVerificationToken";
-import getTraceFor from "./utils/getTraceFor";
+import getQueryTrace from "./utils/getQueryTrace";
 import { Utils } from "./utils";
 const bearer = require("../session_cookie").value;
 
@@ -41,7 +41,7 @@ const getTrace = async (formData: Utils.FormData) => {
     httpsAgent
   });
 
-  const trace = await getTraceFor({
+  const trace = await getQueryTrace({
     baseUrl,
     formData,
     sessionToken,

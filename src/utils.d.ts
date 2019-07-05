@@ -79,7 +79,7 @@ export declare namespace Utils {
     (options: { baseUrl: Url; httpsAgent: Agent }): Promise<Token>;
   }
 
-  export interface GetTraceForFn {
+  export interface getQueryTraceFn {
     (options: {
       baseUrl: string;
       formData: FormData;
