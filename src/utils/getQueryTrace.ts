@@ -15,21 +15,16 @@ const createCurlCmd: Utils.CreateCurlCmdFn = ({
   const escapedSessionToken = querystring.escape(sessionToken.value);
   const escapedVerificationToken = querystring.escape(verificationToken.value);
   const stringifiedFormData = JSON.stringify(formData);
-  return `
-    curl '${queryUrl}' \
-      -x ${proxyHost}:${proxyPort} \
-      -H 'Content-Type: multipart/form-data; boundary=----${multipartBoundary}' \
-      -H 'Accept: application/json' \
-      -H 'Cookie: ${sessionToken.name}=${escapedSessionToken};' \
-      -H 'Connection: keep-alive' \
-      -H 'X-Request-Verification-Token: ${escapedVerificationToken}' \
-      --data-binary \
-        $'------${multipartBoundary}\r\nContent-Disposition: form-data; name="heading"; filename="blob"\r\nContent-Type: application/json\r\n\r\n \
-        ${stringifiedFormData} \
-        \r\n------${multipartBoundary}--\r\n' \
-      --compressed \
-      --insecure
-  `;
+  return `curl '${queryUrl}' \
+-x ${proxyHost}:${proxyPort} \
+-H 'Content-Type: multipart/form-data; boundary=----${multipartBoundary}' \
+-H 'Accept: application/json' \
+-H 'Cookie: ${sessionToken.name}=${escapedSessionToken};' \
+-H 'Connection: keep-alive' \
+-H 'X-Request-Verification-Token: ${escapedVerificationToken}' \
+--data-binary $'------${multipartBoundary}\r\nContent-Disposition: form-data; name="heading"; filename="blob"\r\nContent-Type: application/json\r\n\r\n${stringifiedFormData}\r\n------${multipartBoundary}--\r\n' \
+--compressed \
+--insecure`;
 };
 
 const runCmd = (cmd: string): Promise<string> =>
