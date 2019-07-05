@@ -28,7 +28,9 @@ As the manual setup can be quite tedious, these scripts will ease the checks.
 
 ## Commands
 
-Type `make help` to list the available commands
+You can use the command `make test-policy` to trigger policies tests.
+
+Type `make help` to list the other available commands:
 
 ```
 Available commands:
