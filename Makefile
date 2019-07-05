@@ -59,8 +59,16 @@ cypress:
 .PHONY: certificate  ## Creates a new self-signed certificate
 certificate: .certificate/
 
-.PHONY: test-policy ## Runs tests against APIM s2s policy
-test-policy: $(.SESSION_COOKIE_SPEC_FILE)
+.PHONY: test ## Runs tests against APIM s2s policy
+test:
+	@if [ $(shell ./bin/session_expired) = true ]; then \
+		$(MAKE) session; \
+    fi
+	@echo ""; echo 🌀 Run policy tests
+	@@. .env; npm test
+
+.PHONY: test-ci ## Runs tests against APIM s2s policy (CI mode)
+test-ci:  $(.SESSION_COOKIE_SPEC_FILE) node_modules/
 	@if [ $(shell ./bin/session_expired) = true ]; then \
 		$(MAKE) session; \
     fi

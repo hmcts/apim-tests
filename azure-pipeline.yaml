@@ -1,0 +1,22 @@
+name: APIM policy tests
+
+trigger:
+  branches:
+    include:
+      - refs/tags/*
+
+pr:
+  branches:
+    include:
+      - master
+
+jobs:
+  - job: Main
+    pool:
+      vmImage: VS2017-Win2016
+    steps:
+      - task: Bash@3
+        displayName: Policy tests
+        inputs:
+          targetType: inline
+          script: make test-ci

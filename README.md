@@ -28,7 +28,7 @@ As the manual setup can be quite tedious, these scripts will ease the checks.
 
 ## Commands
 
-You can use the command `make test-policy` to trigger policies tests.
+You can use the command `make test` to trigger policies tests.
 
 Type `make help` to list the other available commands:
 
@@ -39,5 +39,5 @@ Available commands:
 	certificate                       Creates a new self-signed certificate
 	help                              Display help section
 	session                           Creates a new sidam session
-	test-policy                       Runs tests against APIM s2s policy
+	test                              Runs tests against APIM s2s policy
 ```
