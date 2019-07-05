@@ -52,25 +52,19 @@ cypress:
 		-nodes \
 		-x509 \
 		-days 3650 \
-		-keyout $@/key.pem \
-		-out $@/cert.pem \
+		-keyout $@key.pem \
+		-out $@cert.pem \
 		-subj "/C=UK/ST=Denial/L=London/O=Dis/CN=www.example.com"
 
 .PHONY: certificate  ## Creates a new self-signed certificate
 certificate: .certificate/
 
 .PHONY: test ## Runs tests against APIM s2s policy
-test: node_modules/
-	@if [ $(shell ./bin/session_expired) = true ]; then \
-		$(MAKE) session; \
-    fi
+test: node_modules/ .certificate/
 	@echo ""; echo 🌀 Run policy tests
 	@@. .env; npm test
 
 .PHONY: test-ci ## Runs tests against APIM s2s policy (CI mode)
-test-ci: node_modules/
-	@if [ $(shell ./bin/session_expired) = true ]; then \
-		$(MAKE) session; \
-    fi
+test-ci: node_modules/ .certificate/
 	@echo ""; echo 🌀 Run policy tests
 	@npm test
