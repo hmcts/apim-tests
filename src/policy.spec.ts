@@ -39,8 +39,6 @@ const getTrace = async (formData: Utils.FormData) => {
     httpsAgent
   });
 
-  console.log(sessionToken, verificationToken);
-
   const trace = await getQueryTrace({
     baseUrl,
     formData,
