@@ -1,4 +1,4 @@
-import "http";
+import "https";
 
 // Fix tunnel declaration
 declare module "tunnel" {

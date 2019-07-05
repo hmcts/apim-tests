@@ -1,6 +1,6 @@
-const getCookieValueOf = (cookieKey: string) => (
-  headers: Headers
-): string | undefined => {
+import { Utils } from "../utils";
+
+const getCookieValueOf: Utils.GetCookieValueOfFn = cookieKey => headers => {
   const str = headers["set-cookie"][0];
   const matcher = new RegExp(`(?<=${cookieKey}=).*?(?=;)`, "gi");
   const matches = str.match(matcher);

@@ -1,13 +1,19 @@
-import { Agent } from "http";
 import { httpsOverHttp } from "tunnel";
+import { Agent } from "https";
+import { Utils } from "../utils";
 
-const createHttpsAgent = ({ host, port, key, cert }): Agent =>
+const createHttpsAgent: Utils.CreateHttpsAgentFn = ({
+  host,
+  port,
+  key,
+  cert
+}) =>
   httpsOverHttp({
     proxy: { host, port },
     cert,
     key,
     passphrase: "YYY",
     rejectUnauthorized: false
-  });
+  }) as Agent;
 
 export default createHttpsAgent;

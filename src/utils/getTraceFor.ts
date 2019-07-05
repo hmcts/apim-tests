@@ -1,27 +1,18 @@
 import * as superagent from "superagent";
-import curlCmd from "./curlCmd";
+import createCurlCmd from "./createCurlCmd";
 import { exec } from "child_process";
-import { Apim } from "../lib";
+import { Utils } from "../utils";
 
-interface getTraceParams {
-  baseUrl: string;
-  formData: any;
-  sessionToken: Apim.Token;
-  verificationToken: Apim.Token;
-  proxyHost: Apim.Hostname;
-  proxyPort: Apim.Port;
-}
-
-const getTraceFor = async ({
+const getTraceFor: Utils.GetTraceForFn = async ({
   baseUrl,
   formData,
   sessionToken,
   verificationToken,
   proxyHost,
   proxyPort
-}: getTraceParams) => {
+}) => {
   const queryUrl = baseUrl + "/console/query";
-  const cmd = curlCmd({
+  const cmd = createCurlCmd({
     queryUrl,
     sessionToken,
     verificationToken,

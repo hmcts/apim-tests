@@ -1,16 +1,11 @@
 import * as superagent from "superagent";
 import getCookieValueOf from "./getCookieValueOf";
-import { Apim } from "../lib";
+import { Utils } from "../utils";
 
-interface getVerificationTokenParams {
-  baseUrl: Apim.Url;
-  httpsAgent: any;
-}
-
-const getVerificationToken = async ({
+const getPortalVerificationToken: Utils.getPortalVerificationTokenParamsFn = async ({
   baseUrl,
   httpsAgent
-}: getVerificationTokenParams): Promise<Apim.Token> => {
+}) => {
   const name = "__RequestVerificationToken";
   const sessionReq = await superagent.get(baseUrl).agent(httpsAgent);
   const value = getCookieValueOf(name)(sessionReq.header);
@@ -20,4 +15,4 @@ const getVerificationToken = async ({
   };
 };
 
-export default getVerificationToken;
+export default getPortalVerificationToken;

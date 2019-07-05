@@ -1,23 +1,14 @@
 import * as querystring from "querystring";
-import { Apim } from "../lib";
+import { Utils } from "../utils";
 
-interface curlCmdParams {
-  queryUrl: string;
-  sessionToken: Apim.Token;
-  verificationToken: Apim.Token;
-  formData: Apim.FormData;
-  proxyHost: Apim.Hostname;
-  proxyPort: Apim.Port;
-}
-
-const curlCmd = ({
+const createCurlCmd: Utils.CreateCurlCmdFn = ({
   queryUrl,
   sessionToken,
   verificationToken,
   formData,
   proxyHost,
   proxyPort
-}: curlCmdParams) => {
+}) => {
   const now = Date.now();
   return `
     curl '${queryUrl}' \
@@ -37,4 +28,4 @@ const curlCmd = ({
   `;
 };
 
-export default curlCmd;
+export default createCurlCmd;

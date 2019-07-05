@@ -1,10 +1,10 @@
 import { readFileSync } from "fs";
 import * as jwt from "jsonwebtoken";
-import createHttpsAgent from "./lib/createHttpsAgent";
-import getSessionToken from "./lib/getSessionToken";
-import getVerificationToken from "./lib/getVerificationToken";
-import getTraceFor from "./lib/getTraceFor";
-import { Apim } from "./lib";
+import createHttpsAgent from "./utils/createHttpsAgent";
+import getPortalSessionToken from "./utils/getPortalSessionToken";
+import getPortalVerificationToken from "./utils/getPortalVerificationToken";
+import getTraceFor from "./utils/getTraceFor";
+import { Utils } from "./utils";
 const bearer = require("../session_cookie").value;
 
 const {
@@ -22,22 +22,22 @@ const SERVICE_SUBSCRIPTION = "ccd_gw";
 
 const httpsAgent = createHttpsAgent({
   host: PROXY_HOST,
-  port: PROXY_PORT,
+  port: +PROXY_PORT,
   key: readFileSync("./.certificate/key.pem"),
   cert: readFileSync("./.certificate/cert.pem")
 });
 
-const getTrace = async formData => {
+const getTrace = async (formData: Utils.FormData) => {
   const baseUrl = PORTAL_BASE_URL;
 
-  const sessionToken = await getSessionToken({
+  const sessionToken = await getPortalSessionToken({
     baseUrl,
     email: PORTAL_EMAIL,
     password: PORTAL_PASSWORD,
     httpsAgent
   });
 
-  const verificationToken = await getVerificationToken({
+  const verificationToken = await getPortalVerificationToken({
     baseUrl,
     httpsAgent
   });
@@ -48,14 +48,14 @@ const getTrace = async formData => {
     sessionToken,
     verificationToken,
     proxyHost: PROXY_HOST,
-    proxyPort: PROXY_PORT
+    proxyPort: +PROXY_PORT
   });
 
   return trace;
 };
 
 describe("The api gateway", () => {
-  let trace;
+  let trace: Utils.Trace | undefined;
 
   beforeAll(async () => {
     trace = await getTrace({
@@ -107,13 +107,12 @@ describe("The api gateway", () => {
     ).value;
     expect(typeof s2sToken === "string").toBeTruthy();
 
-    const decoded = jwt.decode(s2sToken) as Apim.Decoded;
+    const decoded = jwt.decode(s2sToken) as Utils.DecodedJwt;
 
     const serviceSubscription = decoded.sub;
     expect(serviceSubscription).toEqual(SERVICE_SUBSCRIPTION);
 
-    const secondsTillExpiration =
-      parseInt(decoded.exp, 10) - Math.round(Date.now() / 1000);
+    const secondsTillExpiration = +decoded.exp - Math.round(Date.now() / 1000);
     expect(secondsTillExpiration > 0).toBeTruthy();
   });
 });
