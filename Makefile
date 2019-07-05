@@ -60,7 +60,7 @@ cypress:
 certificate: .certificate/
 
 .PHONY: test ## Runs tests against APIM s2s policy
-test:
+test: node_modules/
 	@if [ $(shell ./bin/session_expired) = true ]; then \
 		$(MAKE) session; \
     fi
@@ -68,7 +68,7 @@ test:
 	@@. .env; npm test
 
 .PHONY: test-ci ## Runs tests against APIM s2s policy (CI mode)
-test-ci:  $(.SESSION_COOKIE_SPEC_FILE) node_modules/
+test-ci: node_modules/
 	@if [ $(shell ./bin/session_expired) = true ]; then \
 		$(MAKE) session; \
     fi

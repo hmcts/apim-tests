@@ -5,7 +5,6 @@ import getPortalSessionToken from "./utils/getPortalSessionToken";
 import getPortalVerificationToken from "./utils/getPortalVerificationToken";
 import getQueryTrace from "./utils/getQueryTrace";
 import { Utils } from "./utils";
-const bearer = require("../session_cookie").value;
 
 const {
   PORTAL_EMAIL,
@@ -14,7 +13,6 @@ const {
   SUBSCRIPTION_KEY,
   SERVICE_SUBSCRIPTION,
   PORTAL_PREVIEW_HOST,
-  CYPRESS_CASE_ID,
   PROXY_HOST,
   PROXY_PORT
 } = process.env;
@@ -61,7 +59,7 @@ describe("The api gateway", () => {
       httpMethod: "GET",
       scheme: "https",
       host: PORTAL_PREVIEW_HOST,
-      path: `ccd-data-store-api/cases/${CYPRESS_CASE_ID}`,
+      path: `ccd-data-store-api/cases/1111222233334444`,
       headers: [
         {
           name: "Host",
@@ -69,7 +67,7 @@ describe("The api gateway", () => {
         },
         {
           name: "Authorization",
-          value: `Bearer ${bearer}`
+          value: `Bearer whatevertokenyouwantdude`
         },
         {
           name: "ServiceAuthorization",
@@ -95,7 +93,7 @@ describe("The api gateway", () => {
   it("forwards the incoming request", () => {
     const forwarded = trace.traceEntries.backend[0];
     expect(forwarded.source).toEqual("forward-request");
-    expect(forwarded.data.request.url).toContain(`cases/${CYPRESS_CASE_ID}`);
+    expect(forwarded.data.request.url).toContain(`cases/1111222233334444`);
   });
 
   it("adds a valid s2s token to the forwarded request", () => {
