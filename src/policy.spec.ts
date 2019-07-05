@@ -39,6 +39,8 @@ const getTrace = async (formData: Utils.FormData) => {
     httpsAgent
   });
 
+  console.log(sessionToken, verificationToken);
+
   const trace = await getQueryTrace({
     baseUrl,
     formData,
@@ -57,40 +59,45 @@ describe("The api gateway", () => {
   let trace: Utils.Trace | undefined;
 
   beforeAll(async () => {
-    trace = await getTrace({
-      httpMethod: "GET",
-      scheme: "https",
-      host: PORTAL_PREVIEW_HOST,
-      path: `ccd-data-store-api/cases/1111222233334444`,
-      headers: [
-        {
-          name: "Host",
-          value: PORTAL_PREVIEW_HOST
-        },
-        {
-          name: "Authorization",
-          value: `Bearer whatevertokenyouwantdude`
-        },
-        {
-          name: "ServiceAuthorization",
-          value: SERVICE_SUBSCRIPTION
-        },
-        {
-          name: "experimental",
-          value: "false"
-        },
-        {
-          name: "Ocp-Apim-Subscription-Key",
-          value: SUBSCRIPTION_KEY,
-          secret: true
-        },
-        {
-          name: "Ocp-Apim-Trace",
-          value: "true"
-        }
-      ]
-    });
-  }, timeout);
+    try {
+      trace = await getTrace({
+        httpMethod: "GET",
+        scheme: "https",
+        host: PORTAL_PREVIEW_HOST,
+        path: `ccd-data-store-api/cases/1111222233334444`,
+        headers: [
+          {
+            name: "Host",
+            value: PORTAL_PREVIEW_HOST
+          },
+          {
+            name: "Authorization",
+            value: `Bearer whatevertokenyouwantdude`
+          },
+          {
+            name: "ServiceAuthorization",
+            value: SERVICE_SUBSCRIPTION
+          },
+          {
+            name: "experimental",
+            value: "false"
+          },
+          {
+            name: "Ocp-Apim-Subscription-Key",
+            value: SUBSCRIPTION_KEY,
+            secret: true
+          },
+          {
+            name: "Ocp-Apim-Trace",
+            value: "true"
+          }
+        ]
+      });
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  });
 
   it("forwards the incoming request", () => {
     const forwarded = trace.traceEntries.backend[0];
