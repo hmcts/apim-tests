@@ -15,7 +15,8 @@ const createCurlCmd: Utils.CreateCurlCmdFn = ({
   const escapedSessionToken = querystring.escape(sessionToken.value);
   const escapedVerificationToken = querystring.escape(verificationToken.value);
   const stringifiedFormData = JSON.stringify(formData);
-  return `curl -v '${queryUrl}' \
+  return `curl \
+'${queryUrl}' \
 -x ${proxyHost}:${proxyPort} \
 -H 'Content-Type: multipart/form-data; boundary=----${multipartBoundary}' \
 -H 'Accept: application/json' \
