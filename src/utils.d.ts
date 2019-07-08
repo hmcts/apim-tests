@@ -41,7 +41,7 @@ export declare namespace Utils {
 
   export interface FormData {
     httpMethod: HttpMethod;
-    scheme: "HTTP" | "HTTPS";
+    scheme: "http" | "https";
     host: Hostname;
     path: string;
     headers: HeaderSpec[];

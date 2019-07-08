@@ -59,7 +59,7 @@ describe("The api gateway", () => {
   beforeAll(async () => {
     trace = await getTrace({
       httpMethod: "GET",
-      scheme: "HTTPS",
+      scheme: "http",
       host: PORTAL_PREVIEW_HOST,
       path: `ccd-data-store-api/cases/1111222233334444`,
       headers: [
