@@ -77,16 +77,16 @@ describe("The api gateway", () => {
         },
         {
           name: "experimental",
-          value: "false"
+          value: false
         },
         {
           name: "Ocp-Apim-Subscription-Key",
           value: SUBSCRIPTION_KEY,
-          secret: "true"
+          secret: true
         },
         {
           name: "Ocp-Apim-Trace",
-          value: "true"
+          value: true
         }
       ]
     });

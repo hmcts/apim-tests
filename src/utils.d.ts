@@ -25,8 +25,8 @@ export declare namespace Utils {
 
   interface HeaderSpec {
     name: string;
-    value: string | number;
-    secret?: string;
+    value: string | number | boolean;
+    secret?: string | boolean;
   }
 
   type HttpMethod =
