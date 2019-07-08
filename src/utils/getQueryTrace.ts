@@ -30,20 +30,14 @@ const createCurlCmd: Utils.CreateCurlCmdFn = ({
 };
 
 const runCmd = (cmd: string): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const cmdProcess = exec(cmd, (error, stdout, stderr) => {
+  new Promise((resolve, reject) =>
+    exec(cmd, (error, stdout, stderr) => {
       if (error) {
         return reject(error);
       }
       return resolve(stdout.toString());
-    });
-    cmdProcess.stdout.on("data", data => {
-      console.log("stdout: " + data.toString());
-    });
-    cmdProcess.stderr.on("data", data => {
-      console.log("stderr: " + data.toString());
-    });
-  });
+    })
+  );
 
 const getQueryTrace: Utils.getQueryTraceFn = async ({
   baseUrl,
