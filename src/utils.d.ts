@@ -26,7 +26,7 @@ export declare namespace Utils {
   interface HeaderSpec {
     name: string;
     value: string | number;
-    secret?: boolean;
+    secret?: string;
   }
 
   type HttpMethod =
@@ -41,7 +41,7 @@ export declare namespace Utils {
 
   export interface FormData {
     httpMethod: HttpMethod;
-    scheme: "http" | "https";
+    scheme: "HTTP" | "HTTPS";
     host: Hostname;
     path: string;
     headers: HeaderSpec[];

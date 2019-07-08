@@ -59,7 +59,7 @@ describe("The api gateway", () => {
   beforeAll(async () => {
     trace = await getTrace({
       httpMethod: "GET",
-      scheme: "https",
+      scheme: "HTTPS",
       host: PORTAL_PREVIEW_HOST,
       path: `ccd-data-store-api/cases/1111222233334444`,
       headers: [
@@ -82,7 +82,7 @@ describe("The api gateway", () => {
         {
           name: "Ocp-Apim-Subscription-Key",
           value: SUBSCRIPTION_KEY,
-          secret: true
+          secret: "true"
         },
         {
           name: "Ocp-Apim-Trace",
