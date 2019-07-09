@@ -12,6 +12,8 @@ pr:
 
 jobs:
   - job: Main
+    workspace:
+      clean: all
     pool:
       name: hmcts-agent-pool
       vmImage: ubuntu-16.04
