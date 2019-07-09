@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "JEST_JUNIT_OUTPUT=./.artifacts/TEST-apim-test.xml jest"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "@types/tunnel": "0.0.1",
     "cypress": "^3.3.1",
     "jest": "^24.8.0",
+    "jest-junit": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "superagent": "^5.1.0",
     "ts-jest": "^24.0.2",
