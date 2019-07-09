@@ -3,6 +3,7 @@ name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)
 trigger:
   branches:
     include:
+      - master
       - refs/tags/*
 
 pr:
@@ -16,6 +17,7 @@ schedules:
   branches:
     include:
     - master
+    - refs/tags/*
   always: true
 
 jobs:
