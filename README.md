@@ -1,5 +1,7 @@
 # APIM tests
 
+[![Build Status](https://dev.azure.com/hmcts/CNP/_apis/build/status/CNP/Api%20Management%20Tests?branchName=master)](https://dev.azure.com/hmcts/CNP/_build/latest?definitionId=167&branchName=master)
+
 This project is aimed at performing tests on an Azure API gateway, especially on its policies as some can involve programatic computation (via Azure Function apps for example).
 
 As the manual setup can be quite tedious, these scripts will ease the checks.
