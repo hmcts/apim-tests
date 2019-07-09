@@ -33,3 +33,10 @@ jobs:
           PORTAL_PREVIEW_HOST: $(PORTAL_PREVIEW_HOST)
           PROXY_HOST: $(PROXY_HOST)
           PROXY_PORT: $(PROXY_PORT)
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/TEST-*.xml'
+          failTaskOnFailedTests: true
+          
