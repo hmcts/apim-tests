@@ -32,7 +32,7 @@ const createCurlCmd: Utils.CreateCurlCmdFn = ({
 
 const runCmd = (cmd: string): Promise<string> =>
   new Promise((resolve, reject) =>
-    exec(cmd, (error, stdout, stderr) => {
+    exec(cmd, { shell: "/bin/bash" }, (error, stdout, stderr) => {
       if (error) {
         return reject(error);
       }
