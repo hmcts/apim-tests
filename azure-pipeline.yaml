@@ -10,35 +10,9 @@ pr:
     include:
       - master
 
-# Max 100 triggers per week per scheduler,
-# hence the repeated declarations above.
 schedules:
-- cron: "*/5 9-17 * * 1"
+- cron: '*/5 8-16 * * 1-5'
   displayName: Run every 5 min on Mondays
-  branches:
-    include:
-    - master
-  always: true
-- cron: "*/5 9-17 * * 2"
-  displayName: Run every 5 min on Tuesdays
-  branches:
-    include:
-    - master
-  always: true
-- cron: "*/5 9-17 * * 3"
-  displayName: Run every 5 min on Wednesdays
-  branches:
-    include:
-    - master
-  always: true
-- cron: "*/5 9-17 * * 4"
-  displayName: Run every 5 min on Thursdays
-  branches:
-    include:
-    - master
-  always: true
-- cron: "*/5 9-17 * * 5"
-  displayName: Run every 5 min on Fridays
   branches:
     include:
     - master
