@@ -10,6 +10,14 @@ pr:
     include:
       - master
 
+schedules:
+- cron: "*/30 8-18 * * 1-5"
+  displayName: Run every 30 min during weekdays hours
+  branches:
+    include:
+    - master
+  always: true
+
 jobs:
   - job: Main
     workspace:
