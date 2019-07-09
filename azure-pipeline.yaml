@@ -4,7 +4,6 @@ trigger:
   branches:
     include:
       - master
-      - refs/tags/*
 
 pr:
   branches:
@@ -17,7 +16,6 @@ schedules:
   branches:
     include:
     - master
-    - refs/tags/*
   always: true
 
 jobs:
