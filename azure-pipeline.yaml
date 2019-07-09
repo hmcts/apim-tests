@@ -1,4 +1,4 @@
-name: APIM policy tests
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
   branches:
@@ -39,4 +39,3 @@ jobs:
           testResultsFormat: 'JUnit'
           testResultsFiles: '**/TEST-*.xml'
           failTaskOnFailedTests: true
-          
