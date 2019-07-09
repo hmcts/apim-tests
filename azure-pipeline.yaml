@@ -11,8 +11,8 @@ pr:
       - master
 
 schedules:
-- cron: "*/30 8-18 * * 1-5"
-  displayName: Run every 30 min during weekdays hours
+- cron: "*/5 * * * *"
+  displayName: Run every 5 min
   branches:
     include:
     - master
