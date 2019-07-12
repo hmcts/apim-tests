@@ -42,7 +42,8 @@ api-call: $(.SESSION_COOKIE_SPEC_FILE)
 		-H "ServiceAuthorization: ccd_gw" \
 		-H "experimental: false" \
 		-H "Ocp-Apim-Subscription-Key: $(shell . .env; echo $${SUBSCRIPTION_KEY})" \
-		https://apim-preview.service.core-compute-preview.internal/ccd-data-store-api/cases/$$CYPRESS_CASE_ID
+		https://apim-preview.service.core-compute-preview.internal/ccd-data-store-api/cases/$$CYPRESS_CASE_ID \
+		| jq
 
 .PHONY: cypress
 cypress:

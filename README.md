@@ -11,6 +11,7 @@ As the manual setup can be quite tedious, these scripts will ease the checks.
 - GNUmake
 - nodejs
 - curl
+- jq
 - an **active** VPN connection
 - env variables as specified in the `.env.sample` file to place in a `.env` as specified above
 
