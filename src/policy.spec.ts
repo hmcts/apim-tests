@@ -63,10 +63,6 @@ const defaultHeaders = [
     value: `Bearer whatevertokenyouwantdude`
   },
   {
-    name: "ServiceAuthorization",
-    value: SERVICE_SUBSCRIPTION
-  },
-  {
     name: "experimental",
     value: false
   },
@@ -128,6 +124,8 @@ describe("The api gateway", () => {
 
   describe("with an incoming request WITH an s2s token", () => {
     let trace: Utils.Trace | undefined;
+    const dummyJwt =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
     beforeAll(async () => {
       trace = await getTrace({
@@ -139,7 +137,7 @@ describe("The api gateway", () => {
           ...defaultHeaders,
           {
             name: "ServiceAuthorization",
-            value: "whatever.jwt"
+            value: dummyJwt
           }
         ]
       });
@@ -156,7 +154,7 @@ describe("The api gateway", () => {
       const s2sToken = forwarded.data.request.headers.find(
         ({ name }) => name === "ServiceAuthorization"
       ).value;
-      expect(s2sToken).toEqual("whatever.jwt");
+      expect(s2sToken).toEqual(dummyJwt);
     });
   });
 });
