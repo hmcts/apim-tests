@@ -92,6 +92,10 @@ describe("The api gateway", () => {
     });
   }, timeout);
 
+  it("has a trace", () => {
+    expect(trace !== undefined).toBeTruthy();
+  });
+
   it("forwards the incoming request", () => {
     expect(trace !== undefined).toBeTruthy();
 

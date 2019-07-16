@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "JEST_JUNIT_OUTPUT=./.artifacts/TEST-apim-test.xml jest"
+    "test": "JEST_JUNIT_OUTPUT=./.artifacts/TEST-apim-test.xml jest --bail"
   },
   "author": "",
   "license": "ISC",
