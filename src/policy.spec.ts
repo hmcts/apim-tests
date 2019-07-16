@@ -53,71 +53,110 @@ const getTrace = async (formData: Utils.FormData) => {
 
 const timeout = 1000 * 30; // 30s
 
+const defaultHeaders = [
+  {
+    name: "Host",
+    value: PORTAL_PREVIEW_HOST
+  },
+  {
+    name: "Authorization",
+    value: `Bearer whatevertokenyouwantdude`
+  },
+  {
+    name: "ServiceAuthorization",
+    value: SERVICE_SUBSCRIPTION
+  },
+  {
+    name: "experimental",
+    value: false
+  },
+  {
+    name: "Ocp-Apim-Subscription-Key",
+    value: SUBSCRIPTION_KEY,
+    secret: true
+  },
+  {
+    name: "Ocp-Apim-Trace",
+    value: true
+  }
+];
+
 describe("The api gateway", () => {
-  let trace: Utils.Trace | undefined;
+  describe("with an incoming request WITHOUT an s2s token", () => {
+    let trace: Utils.Trace | undefined;
 
-  beforeAll(async () => {
-    trace = await getTrace({
-      httpMethod: "GET",
-      scheme: "https",
-      host: PORTAL_PREVIEW_HOST,
-      path: `ccd-data-store-api/cases/1111222233334444`,
-      headers: [
-        {
-          name: "Host",
-          value: PORTAL_PREVIEW_HOST
-        },
-        {
-          name: "Authorization",
-          value: `Bearer whatevertokenyouwantdude`
-        },
-        {
-          name: "ServiceAuthorization",
-          value: SERVICE_SUBSCRIPTION
-        },
-        {
-          name: "experimental",
-          value: false
-        },
-        {
-          name: "Ocp-Apim-Subscription-Key",
-          value: SUBSCRIPTION_KEY,
-          secret: true
-        },
-        {
-          name: "Ocp-Apim-Trace",
-          value: true
-        }
-      ]
+    beforeAll(async () => {
+      trace = await getTrace({
+        httpMethod: "GET",
+        scheme: "https",
+        host: PORTAL_PREVIEW_HOST,
+        path: `ccd-data-store-api/cases/1111222233334444`,
+        headers: defaultHeaders
+      });
+    }, timeout);
+
+    it("has a trace", () => {
+      expect(trace !== undefined).toBeTruthy();
     });
-  }, timeout);
 
-  it("has a trace", () => {
-    expect(trace !== undefined).toBeTruthy();
+    it("forwards the incoming request", () => {
+      expect(trace !== undefined).toBeTruthy();
+
+      const forwarded = trace.traceEntries.backend[0];
+      expect(forwarded.source).toEqual("forward-request");
+      expect(forwarded.data.request.url).toContain(`cases/1111222233334444`);
+    });
+
+    it("adds a valid s2s token to the forwarded request", () => {
+      const forwarded = trace.traceEntries.backend[0];
+
+      const s2sToken = forwarded.data.request.headers.find(
+        ({ name }) => name === "ServiceAuthorization"
+      ).value;
+      expect(typeof s2sToken === "string").toBeTruthy();
+
+      const decoded = jwt.decode(s2sToken) as Utils.DecodedJwt;
+
+      const serviceSubscription = decoded.sub;
+      expect(serviceSubscription).toEqual(SERVICE_SUBSCRIPTION);
+
+      const secondsTillExpiration =
+        +decoded.exp - Math.round(Date.now() / 1000);
+      expect(secondsTillExpiration > 0).toBeTruthy();
+    });
   });
 
-  it("forwards the incoming request", () => {
-    expect(trace !== undefined).toBeTruthy();
+  describe("with an incoming request WITH an s2s token", () => {
+    let trace: Utils.Trace | undefined;
 
-    const forwarded = trace.traceEntries.backend[0];
-    expect(forwarded.source).toEqual("forward-request");
-    expect(forwarded.data.request.url).toContain(`cases/1111222233334444`);
-  });
+    beforeAll(async () => {
+      trace = await getTrace({
+        httpMethod: "GET",
+        scheme: "https",
+        host: PORTAL_PREVIEW_HOST,
+        path: `ccd-data-store-api/cases/1111222233334444`,
+        headers: [
+          ...defaultHeaders,
+          {
+            name: "ServiceAuthorization",
+            value: "whatever.jwt"
+          }
+        ]
+      });
+    }, timeout);
 
-  it("adds a valid s2s token to the forwarded request", () => {
-    const forwarded = trace.traceEntries.backend[0];
+    it("has a trace", () => {
+      expect(trace !== undefined).toBeTruthy();
+    });
 
-    const s2sToken = forwarded.data.request.headers.find(
-      ({ name }) => name === "ServiceAuthorization"
-    ).value;
-    expect(typeof s2sToken === "string").toBeTruthy();
+    it("forwards the s2s token if it is already present in the incoming request", () => {
+      const forwarded = trace.traceEntries.backend[0];
+      expect(forwarded.source).toEqual("forward-request");
 
-    const decoded = jwt.decode(s2sToken) as Utils.DecodedJwt;
-
-    const serviceSubscription = decoded.sub;
-    expect(serviceSubscription).toEqual(SERVICE_SUBSCRIPTION);
-
-    const secondsTillExpiration = +decoded.exp - Math.round(Date.now() / 1000);
-    expect(secondsTillExpiration > 0).toBeTruthy();
+      const s2sToken = forwarded.data.request.headers.find(
+        ({ name }) => name === "ServiceAuthorization"
+      ).value;
+      expect(s2sToken).toEqual("whatever.jwt");
+    });
   });
 });
