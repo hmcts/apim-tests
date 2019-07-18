@@ -42,7 +42,7 @@ api-call: $(.SESSION_COOKIE_SPEC_FILE)
 		-H "ServiceAuthorization: ccd_gw" \
 		-H "experimental: false" \
 		-H "Ocp-Apim-Subscription-Key: $(shell . .env; echo $${SUBSCRIPTION_KEY})" \
-		https://$$PORTAL_PREVIEW_HOST/$$API_BASE_NAME/cases/$$CYPRESS_CASE_ID \
+		https://$$API_HOSTNAME/$$API_BASE_NAME/cases/$$CYPRESS_CASE_ID \
 		| jq
 
 .PHONY: cypress

@@ -11,7 +11,7 @@ const {
   PORTAL_EMAIL,
   PORTAL_PASSWORD,
   PORTAL_BASE_URL,
-  PORTAL_PREVIEW_HOST,
+  API_HOSTNAME,
   PROXY_HOST,
   PROXY_PORT,
   SERVICE_SUBSCRIPTION,
@@ -57,7 +57,7 @@ const timeout = 1000 * 30; // 30s
 const defaultHeaders = [
   {
     name: "Host",
-    value: PORTAL_PREVIEW_HOST
+    value: API_HOSTNAME
   },
   {
     name: "Authorization",
@@ -86,7 +86,7 @@ describe("The api gateway", () => {
       trace = await getTrace({
         httpMethod: "GET",
         scheme: "https",
-        host: PORTAL_PREVIEW_HOST,
+        host: API_HOSTNAME,
         path: `${API_BASE_NAME}/cases/1111222233334444`,
         headers: defaultHeaders
       });
@@ -132,7 +132,7 @@ describe("The api gateway", () => {
       trace = await getTrace({
         httpMethod: "GET",
         scheme: "https",
-        host: PORTAL_PREVIEW_HOST,
+        host: API_HOSTNAME,
         path: `${API_BASE_NAME}/cases/1111222233334444`,
         headers: [
           ...defaultHeaders,

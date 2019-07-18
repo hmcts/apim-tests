@@ -26,7 +26,7 @@ As the manual setup can be quite tedious, these scripts will ease the checks.
 | `PORTAL_EMAIL`         | portal account email                                                                |
 | `PORTAL_PASSWORD`      | portal account password                                                             |
 | `PORTAL_BASE_URL`      | portal base url                                                                     |
-| `PORTAL_PREVIEW_HOST`  | portal base preview host name                                                       |
+| `API_HOSTNAME`         | api host name                                                                       |
 | `PROXY_HOST`           | vpn proxy host name                                                                 |
 | `PROXY_PORT`           | vpn proxy port                                                                      |
 
