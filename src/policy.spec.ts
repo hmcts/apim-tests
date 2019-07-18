@@ -7,14 +7,15 @@ import getQueryTrace from "./utils/getQueryTrace";
 import { Utils } from "./utils";
 
 const {
+  API_BASE_NAME,
   PORTAL_EMAIL,
   PORTAL_PASSWORD,
   PORTAL_BASE_URL,
-  SUBSCRIPTION_KEY,
-  SERVICE_SUBSCRIPTION,
   PORTAL_PREVIEW_HOST,
   PROXY_HOST,
-  PROXY_PORT
+  PROXY_PORT,
+  SERVICE_SUBSCRIPTION,
+  SUBSCRIPTION_KEY
 } = process.env;
 
 const httpsAgent = createHttpsAgent({
@@ -86,7 +87,7 @@ describe("The api gateway", () => {
         httpMethod: "GET",
         scheme: "https",
         host: PORTAL_PREVIEW_HOST,
-        path: `ccd-data-store-api/cases/1111222233334444`,
+        path: `${API_BASE_NAME}/cases/1111222233334444`,
         headers: defaultHeaders
       });
     }, timeout);
@@ -132,7 +133,7 @@ describe("The api gateway", () => {
         httpMethod: "GET",
         scheme: "https",
         host: PORTAL_PREVIEW_HOST,
-        path: `ccd-data-store-api/cases/1111222233334444`,
+        path: `${API_BASE_NAME}/cases/1111222233334444`,
         headers: [
           ...defaultHeaders,
           {

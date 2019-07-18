@@ -17,6 +17,7 @@ As the manual setup can be quite tedious, these scripts will ease the checks.
 
 | Name                   | Description                                                                         |
 | ---------------------- | ----------------------------------------------------------------------------------- |
+| `API_BASE_NAME`        | is the prefix of the api, as in `<host>/<API_BASE_NAME>/*`                          |
 | `SUBSCRIPTION_KEY`     | corresponds to the `Ocp-Apim-Subscription-Key` you can find in the apim GUI console |
 | `SERVICE_SUBSCRIPTION` | corresponds to the vault service subscription key used to generate the s2s secret   |
 | `CYPRESS_CASE_ID`      | valid case ID as we tests against CCD                                               |

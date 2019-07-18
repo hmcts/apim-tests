@@ -42,7 +42,7 @@ api-call: $(.SESSION_COOKIE_SPEC_FILE)
 		-H "ServiceAuthorization: ccd_gw" \
 		-H "experimental: false" \
 		-H "Ocp-Apim-Subscription-Key: $(shell . .env; echo $${SUBSCRIPTION_KEY})" \
-		https://apim-preview.service.core-compute-preview.internal/ccd-data-store-api/cases/$$CYPRESS_CASE_ID \
+		https://apim-preview.service.core-compute-preview.internal/$$API_BASE_NAME/cases/$$CYPRESS_CASE_ID \
 		| jq
 
 .PHONY: cypress
@@ -67,7 +67,8 @@ certificate: $(.CERTIFICATE_DIR)
 .PHONY: test ## Runs tests against APIM s2s policy
 test: $(.NODE_MODULES_DIR) $(.CERTIFICATE_DIR)
 	@echo ""; echo 🌀 Run policy tests
-	@@. .env; npm test
+	@echo ""; . .env; echo 👩‍💻 testing against $${API_BASE_NAME}
+	@. .env; npm test
 
 .PHONY: test-ci ## Runs tests against APIM s2s policy (CI mode)
 test-ci: $(.NODE_MODULES_DIR) $(.CERTIFICATE_DIR)
