@@ -11,7 +11,7 @@ pr:
       - master
 
 schedules:
-- cron: '*/5 8-16 * * 1-5'
+- cron: '*/15 8-16 * * 1-5'
   displayName: Run every 5 min on weekdays
   branches:
     include:
