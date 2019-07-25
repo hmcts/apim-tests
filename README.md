@@ -50,8 +50,18 @@ Available commands:
 
 ## How the tests work
 
-As the api gateway is only a proxy, we don't have the ability to properly frame it, and use a stub backend service for example. The setup of such tests would be tedious.
+As the api gateway is only a proxy, we can't frame it properly, and use a stub backend service for example. The setup of such tests would be tedious.
 
-Fortunately, any Azure Api Gateway Management instance exposes a developer portal with the ability to display a trace of the policies being applied when testing an endpoint. This is what those tests use to make sure the policies are applied as expected, regardless of the actual backend response.
+Fortunately, any Azure Api Gateway Management instance exposes a developer portal with the ability to display a trace of the policies applied when testing an endpoint. This is what those tests use to make sure the policies are applied as expected, regardless of the actual backend response.
 
 It is the reason why you'll see a curl multipart request in `src/utils/getQueryTrace.ts`, which mimics the developer portal's testing requests.
+
+## CI
+
+This project is built and executed via an azure devops pipeline; you can find the details of it in `./azure-pipeline.yaml`.
+
+The status badge brings you to the latest build.
+
+As mentioned in the Prerequisites section, the environment variables have to be exposed in the pipeline.
+
+The CI is running every 15 min at the moment. You can refer to the crontab expression in the `./azure-pipeline.yaml` file.
