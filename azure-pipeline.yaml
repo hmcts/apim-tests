@@ -4,6 +4,11 @@ trigger:
   branches:
     include:
       - master
+  paths:
+    exclude:
+      - README.md
+      - LICENSE.md
+      - .env.sample
 
 pr:
   branches:
