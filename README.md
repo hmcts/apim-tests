@@ -47,3 +47,11 @@ Available commands:
 	session                           Creates a new sidam session
 	test                              Runs tests against APIM s2s policy
 ```
+
+## How the tests work
+
+As the api gateway is only a proxy, we don't have the ability to properly frame it, and use a stub backend service for example. The setup of such tests would be tedious.
+
+Fortunately, any Azure Api Gateway Management instance exposes a developer portal with the ability to display a trace of the policies being applied when testing an endpoint. This is what those tests use to make sure the policies are applied as expected, regardless of the actual backend response.
+
+It is the reason why you'll see a curl multipart request in `src/utils/getQueryTrace.ts`, which mimics the developer portal's testing requests.
