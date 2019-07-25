@@ -30,6 +30,8 @@ As the manual setup can be quite tedious, these scripts will ease the checks.
 | `PROXY_HOST`           | vpn proxy host name                                                                 |
 | `PROXY_PORT`           | vpn proxy port                                                                      |
 
+Notice that the CI expects these environment variables as well.
+
 ## Commands
 
 You can use the command `make test` to trigger policies tests.
